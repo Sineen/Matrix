@@ -91,12 +91,12 @@ public:
      /**
       *
       */
-     T& operator()(unsigned int, unsigned int);
+     T& operator()(unsigned int row, unsigned int col);
 
      /**
       *
       */
-     T operator()(unsigned int, unsigned int) const;
+     T operator()(unsigned int row, unsigned int col) const;
 
 
 /// \returns the begin iterator
@@ -218,6 +218,20 @@ template<class T>
 Matrix<T> Matrix<T>::operator*(const Matrix &other)
 {
     return Matrix<T>();
+}
+
+template<class T>
+T &Matrix<T>::operator()(unsigned int row, unsigned int col)
+{
+    unsigned int index = (row * this->cols()) + col;
+    return *(this->matrix.at(index));
+}
+
+template<class T>
+T Matrix<T>::operator()(unsigned int row, unsigned int col) const
+{
+    unsigned int index = (row * this->cols()) + col;
+    return this->matrix.at(index);
 }
 
 
