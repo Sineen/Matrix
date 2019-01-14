@@ -28,12 +28,16 @@ public:
 
     Matrix(unsigned int rows, unsigned int cols);
 
-    Matrix(vector<T> other);
+    Matrix(Matrix<T>& other);
 
     Matrix(unsigned int rows, unsigned int cols, const vector<T>& cells);
 
-    ~Matrix();
+    ~Matrix() {}
 
+    /**
+     * @param other
+     * @return
+     */
     Matrix<T>& operator=(const Matrix<T> &other);
 
     /**
@@ -87,12 +91,12 @@ public:
      /**
       *
       */
-     <T> operator (unsigned int, unsigned int);
+     T& operator()(unsigned int, unsigned int);
 
      /**
       *
       */
-     const <T> operator()(unsigned int, unsigned int);
+     T operator()(unsigned int, unsigned int) const;
 
 
 /// \returns the begin iterator
@@ -108,6 +112,10 @@ public:
     unsigned int rows();
 
     unsigned int cols();
+
+    unsigned int getSize();
+
+    vector<T> getMatrix();
 
 };
 
@@ -125,7 +133,7 @@ Matrix<T>::Matrix(unsigned int rows, unsigned int cols)
 }
 
 template<class T>
-Matrix<T>::Matrix(vector<T> other)
+Matrix<T>::Matrix(Matrix<T>& other)
 {
     this->size = other.size;
     this->rowNumbers = other.rowNumbers;
@@ -133,8 +141,83 @@ Matrix<T>::Matrix(vector<T> other)
     this->matrix.clear();
     for(int i = 0; i < size; i++ )
     {
-        matrix.push_back(T());
+        matrix.push_back(other.at(i));
     }
+}
+
+template<class T>
+Matrix<T>::Matrix(unsigned int rows, unsigned int cols, const vector<T> &cells)
+{
+    this->size = rows*cols;
+    this->rowNumbers = rows;
+    this->columns = cols;
+    for(int i = 0; i < size; i++ )
+    {
+        matrix.push_back(cells.at(i));
+    }
+}
+
+template<class T>
+Matrix<T> &Matrix<T>::operator=(const Matrix<T> &other)
+{
+    this = Matrix(other);
+    return *this;
+}
+
+
+template<class T>
+Matrix<T> Matrix<T>::operator+(const Matrix<T> &other)
+{
+    unsigned int sizes = this->getSize();
+    Matrix<T> sum = Matrix(this);
+    for(int i = 0; i < sizes; i++ )
+    {
+        sum.getMatrix().at(i) = (this->getMatrix().at(i) + other.getMatrix().at(i));
+    }
+
+    return sum;
+}
+
+template<class T>
+Matrix<T> Matrix<T>::operator-(const Matrix<T> &other)
+{
+    Matrix sum = Matrix(this);
+    for(int i = 0; i < this->getSize() ; i++ )
+    {
+        sum.getMatrix().at(i) = (this->getMatrix().at(i) - other.getMatrix().at(i));
+    }
+
+    return sum;
+}
+
+template<class T>
+unsigned int Matrix<T>::rows()
+{
+    return this->rowNumbers;
+}
+
+template<class T>
+unsigned int Matrix<T>::cols()
+{
+    return this->columns;
+}
+
+template<class T>
+unsigned int Matrix<T>::getSize()
+{
+    return this->size;
+}
+
+template<class T>
+vector<T> Matrix<T>::getMatrix()
+{
+    return this->matrix;
+}
+
+template<class T>
+Matrix<T> Matrix<T>::operator*(const Matrix &other)
+{
+    return Matrix<T>();
 }
 
 
