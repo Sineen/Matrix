@@ -15,9 +15,9 @@ template <class T>
 class Matrix
 {
 private:
-    unsigned int columns = 1;
-    unsigned int rowNumbers =1;
-    unsigned int size = 1;
+    unsigned int columns;
+    unsigned int rowNumbers;
+    unsigned int size;
     vector<T> matrix;
 
 public:
@@ -25,11 +25,14 @@ public:
     /**
      * empty constructor that building a matrix of one
      */
-    Matrix(): columns(1), rowNumbers(1), size(1), matrix(0){}
+    Matrix(): columns(1), rowNumbers(1), size(1)
+    {
+        matrix.push_back(T());
+    }
 
     Matrix(unsigned int rows, unsigned int cols);
 
-    Matrix(Matrix<T>& other);
+    Matrix(const Matrix<T>& other);
 
     Matrix(unsigned int rows, unsigned int cols, const vector<T>& cells);
 
@@ -39,21 +42,21 @@ public:
      * @param other
      * @return
      */
-    Matrix<T>& operator=(const Matrix<T> &other);
+    Matrix<T>& operator=(const Matrix &other);
 
     /**
      * subtracts two matrixes  and puts the vlaues  on teh matrix in the class
      * @param other a second matrix
      * @return  matrix that is sum of both matrixes
      */
-    Matrix<T> operator+(const Matrix<T> &other);
+    Matrix<T> operator+(const Matrix &other);
 
     /**
      * multiplications two matrixes  and puts the vlaues  on teh matrix in the class
      * @param other a second matrix
      * @return matrix that is the subtraction between th e2 matrixes
      */
-    Matrix<T> operator-(const Matrix<T> &other);
+    Matrix<T> operator-(const Matrix &other);
 
     /**
      * addes the object of this class to other adn makes a new matrix and returns that
@@ -64,12 +67,12 @@ public:
     /**
      * returns true if the matrix and the other have the same values
      */
-    bool operator==(const Matrix<T>& other);
+    bool operator==(const Matrix& other);
 
     /**
      * returns true if the matrix and the other have the same values
      */
-    bool operator!=(const Matrix<T>& other);
+    bool operator!=(const Matrix& other);
 
     /**
      * only works for square matrixes ( colum = row) other wise retrun exception
@@ -100,14 +103,14 @@ public:
       */
      T operator()(unsigned int row, unsigned int col) const;
 
-
+//typedef typename std::vector<T>::const_iterator const_iterator;
 /// \returns the begin iterator
-    typename std::vector<T>::iterator begin() {
+    typename vector<T>::iterator begin() {
         return matrix.begin();
     }
 
 /// \returns the end iterator
-    typename std::vector<T>::iterator end() {
+    typename vector<T>::iterator end() {
         return matrix.end();
     }
 
@@ -115,13 +118,13 @@ public:
 
     unsigned int cols()const;
 
-    unsigned int getSize()const;
+    unsigned int getSize() const;
 
-    static vector<T>& getMatrix(const Matrix<T>& m);
+    vector<T>& getMatrix() const;
 
-    vector<T> getColumnIn(const Matrix<T>& m, int index);
+    vector<T> getColumnIn(const Matrix<T>& m, unsigned int index);
 
-    vector<T> getRowIn(const Matrix<T>& m, int index);
+    vector<T> getRowIn(const Matrix<T>& m, unsigned int index);
 
 	static T multiplyColRow(vector<T> col, vector<T>row);
 };
@@ -140,15 +143,17 @@ Matrix<T>::Matrix(unsigned int rows, unsigned int cols)
 }
 
 template<class T>
-Matrix<T>::Matrix(Matrix<T>& other)
+Matrix<T>::Matrix(const Matrix<T>& other)
 {
-    this->size = other.getSize();
     this->rowNumbers = other.rows();
     this->columns = other.cols();
+    this->size = rowNumbers * columns;
+
     this->matrix.clear();
+    vector<T> m = other.getMatrix();
     for(unsigned int i = 0; i < size; i++ )
     {
-        matrix.push_back(getMatrix(other).at(i));
+        matrix.push_back(m.at(i));
     }
 }
 
@@ -158,65 +163,76 @@ Matrix<T>::Matrix(unsigned int rows, unsigned int cols, const vector<T> &cells)
     this->size = rows*cols;
     this->rowNumbers = rows;
     this->columns = cols;
-    for(int i = 0; i < size; i++ )
+    for(unsigned int i = 0; i < size; i++ )
     {
         matrix.push_back(cells.at(i));
     }
 }
 
+
 template<class T>
-Matrix<T> &Matrix<T>::operator=(const Matrix<T> &other)
+Matrix<T> &Matrix<T>::operator=(const Matrix &other)
 {
-    *this = Matrix(other);
-    return *this;
+    this->size = other.getSize();
+    this->rowNumbers = other.rows();
+    this->columns = other.cols();
+    this->matrix.clear();
+    vector<T> m = other.getMatrix();
+    for(unsigned int i = 0; i < size; i++ )
+    {
+        matrix.push_back(m.at(i));
+    }
+    return (*this);
 }
 
 
 template<class T>
-Matrix<T> Matrix<T>::operator+(const Matrix<T> &other)
+Matrix<T> Matrix<T>::operator+(const Matrix &other)
 {
     unsigned int sizes = this->getSize();
     Matrix<T> sum = Matrix(this->rows(), this->cols());
     for(unsigned int i = 0; i < sizes; i++ )
     {
-        getMatrix(sum).at(i) = (getMatrix(*this).at(i) + getMatrix(other).at(i));
+        sum.getMatrix().at(i) = this->getMatrix().at(i) + other.getMatrix().at(i));
     }
 
     return sum;
 }
 
 template<class T>
-Matrix<T> Matrix<T>::operator-(const Matrix<T> &other)
+Matrix<T> Matrix<T>::operator-(const Matrix &other)
 {
     Matrix<T> sum = Matrix(this->rows(), this->cols());
     for(unsigned int i = 0; i < this->getSize() ; i++ )
     {
-        getMatrix(sum).at(i) = (getMatrix(*this).at(i) - getMatrix(other).at(i));
+        sum.getMatrix().at(i) = this->getMatrix().at(i) - other.getMatrix().at(i));
     }
 
     return sum;
 }
 
 template<class T>
-unsigned int Matrix<T>::rows()const {
+unsigned int Matrix<T>::rows()const
+{
     return this->rowNumbers;
 }
 
 template<class T>
-unsigned int Matrix<T>::cols()const {
+unsigned int Matrix<T>::cols()const
+{
     return this->columns;
 }
 
 template<class T>
-unsigned int Matrix<T>::getSize()const
+unsigned int Matrix<T>::getSize() const
 {
     return this->size;
 }
 
 template<class T>
-vector<T>& Matrix<T>::getMatrix(const Matrix<T>& m)
+vector<T>& Matrix<T>::getMatrix() const
 {
-    return m.matrix;
+    return this->matrix;
 }
 
 template<class T>
@@ -252,7 +268,7 @@ T Matrix<T>::operator()(unsigned int row, unsigned int col) const
 }
 
 template<class T>
-vector<T> Matrix<T>::getColumnIn(const Matrix<T> &m, int index)
+vector<T> Matrix<T>::getColumnIn(const Matrix &m,unsigned int index)
 {
 	if ( index < m.cols() and index >= 0)
 	{
@@ -269,7 +285,7 @@ vector<T> Matrix<T>::getColumnIn(const Matrix<T> &m, int index)
 }
 
 template<class T>
-vector<T> Matrix<T>::getRowIn(const Matrix<T> &m, int index)
+vector<T> Matrix<T>::getRowIn(const Matrix &m, unsigned int index)
 {
 	if (index < m.rows() and index >= 0 )
 	{
@@ -304,7 +320,7 @@ T Matrix<T>::multiplyColRow(vector<T> col, vector<T> row)
 	}
 }
 template<class T>
-bool Matrix<T>::operator==(const Matrix<T> &other)
+bool Matrix<T>::operator==(const Matrix &other)
 {
 	if (this->getSize() != other.getSize())
 	{
@@ -318,8 +334,8 @@ bool Matrix<T>::operator==(const Matrix<T> &other)
 	{
 		return false;
 	}
-	vector<T> vector1 = getMatrix(*this);
-	vector<T> vector2 = getMatrix(other);
+	vector<T> vector1 = this->getMatrix();
+	vector<T> vector2 = other.getMatrix();
 	for (unsigned int i = 0 ; i < this->size; i++)
 	{
 		if( vector1.at(i) != vector2.at(i) )
@@ -331,7 +347,7 @@ bool Matrix<T>::operator==(const Matrix<T> &other)
 }
 
 template<class T>
-bool Matrix<T>::operator!=(const Matrix<T> &other)
+bool Matrix<T>::operator!=(const Matrix &other)
 {
 //	 return ! (this == *other);
 	if (this->getSize() != other.getSize())
@@ -346,8 +362,8 @@ bool Matrix<T>::operator!=(const Matrix<T> &other)
 	{
 		return true;
 	}
-	vector<T> vector1 = getMatrix(*this);
-	vector<T> vector2 = getMatrix(other);
+	vector<T> vector1 = this->getMatrix();
+	vector<T> vector2 = other.getMatrix();
 	for (unsigned int i = 0 ; i < this->size; i++)
 	{
 		if( vector1.at(i) != vector2.at(i) )
@@ -367,7 +383,7 @@ bool Matrix<T>::isSquareMatrix()
 template<class T>
 Matrix<T> Matrix<T>::trans()
 {
-	if (isSquareMatrix())
+	if (this->isSquareMatrix())
 	{
 		unsigned int length = this->rows();
 		Matrix<T> transposed = Matrix(length, length);
@@ -389,7 +405,7 @@ Matrix<T> Matrix<T>::trans()
 template <>
 Matrix<Complex> Matrix<Complex> :: trans()
 {
-	if (isSquareMatrix())
+	if (this->isSquareMatrix())
 	{
 		unsigned int length = this->rows();
 		Matrix<Complex> transposed = Matrix(length, length);
@@ -424,6 +440,8 @@ ostream &operator<<(ostream &stream, const Matrix<T> matrix1)
 	}
 	return stream;
 }
+
+
 
 
 #endif //EX3_MATRIX_HPP
