@@ -1,13 +1,32 @@
-./timeChecker 500
-size 500
-eigen mult 1.148e-06
-eigen add 4.81e-07
-matlib mult 6.0439
-matlib add 0.0165758
+Sin_een
+200904803
 
-./timeChecker 50
-size 50
-eigen mult 9.5e-07
-eigen add 3.34e-07
-matlib mult 0.0104545
-matlib add 0.000182314
+
+
+size 	||		  50			   ||		500
+---------------------------------------------------------------
+		||  	*   |	 +		   ||  	  *	     |    +
+---------------------------------------------------------------
+Eigen   || 3.34e-07 |	9.5e-07    ||  1.148e-06 |  4.81e-07
+---------------------------------------------------------------
+Matlib  || 0.0104545| 0.000182314  ||  6.0439    | 0.0165758
+
+
+choose to save the matrix in one vector where the order of the values
+is the order or reading a matrix and to get where each row adn column ends
+we have column and row values and size which is row * column
+with the help of row and column i could know which values in my vector is
+correspondent to which row or column
+
+
+1) obviously there is a difference where Eigen is much faster than my solution
+	Eigen has a faster access to its data thus making it more efficient
+	since the layout we used for Eigen saves the matrix in columns it gives it easier faster access
+	when we do multiplication between matrix my solution would have tol calculate the columns
+	over and over again with each row while Eigen solution doesnt need to do that.
+
+2) as we see the sum is faster than the multiplication in both.
+	this is due to having to go over the two matrices once in the sum,
+	once we are done with a cell we do not go back to it while it is not as linear for multiplication
+	where each row is multiplied by each column of the second matrix and summed up
+	thus having to go over each value multiple times

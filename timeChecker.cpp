@@ -5,18 +5,8 @@
 #include <iostream>
 #include "Matrix.hpp"
 #include <eigen3/Eigen/Dense>
-#include <string>
-#include <cstdlib>
-#include <cassert>
-#include <cstdio>
-#include <cstring>
-#include <fstream>
-#include <iostream>
-#include <vector>
 #include <stack>
-#include <ctime>
 #include <chrono>
-#include "Complex.h"
 
 using Eigen::MatrixXd;
 
