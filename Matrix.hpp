@@ -5,21 +5,26 @@
 #ifndef EX3_MATRIX_HPP
 #define EX3_MATRIX_HPP
 
-#define NOT_A_SQUARE "Matrix is not a Square matrix no trans"
-#define NEXT_VALUE "\t"
-#define NEXT_LINE "\n"
-#define OUT_OF_BOUNDARIES  "index is out of boundaries"
-#define UNCOMPATABLE_MATRIX_SIZE  "the sizes of the two Matrix do not match, can not perform task"
-#define UNCOMPATABLE_VECTOR_SIZE  "the sizes of the two Vectors do not match, can not perform multiplication"
-
 #include <exception>
 #include <iostream>
 #include <vector>
 #include "Complex.h"
+#include <string>
+
+#define NEXT_VALUE "\t"
+#define NEXT_LINE "\n"
+
+const string NOT_A_SQUARE = "Matrix is not a Square matrix no trans";
+const string OUT_OF_BOUNDARIES  = "index is out of boundaries";
+const string UNCOMPATABLE_MATRIX_SIZE = "the sizes of the two Matrix do not match, can not perform task";
+const string UNCOMPATABLE_VECTOR_SIZE = "the sizes of the two Vectors do not match, can not perform multiplication";
+
 
 using namespace std;
 
-
+/**
+ * class of exceptions
+ */
 class Exceptions : public exception
 {
 	private:
@@ -34,7 +39,7 @@ class Exceptions : public exception
 
 };
 
-/**
+ /**
  * @return the exeption msg
  */
 constexpr decltype(auto) Exceptions::what() const
@@ -44,8 +49,8 @@ constexpr decltype(auto) Exceptions::what() const
 
 
 /**
- *
- * @tparam T
+ * matrix of any type
+ * @tparam T any type we want to fill the matrix
  */
 template <class T>
 class Matrix
@@ -71,14 +76,14 @@ public:
 	 * @param rows number of rows we want in our matrix
 	 * @param cols number of columns in out matrix
 	 */
-    Matrix(unsigned int rows, unsigned int cols);
+    Matrix(unsigned int rows, unsigned int cols)  noexcept;
 
 	/**
 	 * a copy constructor that building a matrix with same values of the other matirx
 	 * @param other  a matrix we want to copy
 	 * note this deep copies and the new matrix is not related to the second one after the copy
 	 */
-    Matrix(const Matrix<T>& other);
+    Matrix(const Matrix<T>& other) noexcept;
 
 	/**
 	 * constructor that building a matrix of size rows * colums , and fills the matrix we have with the values in cells
@@ -131,16 +136,17 @@ public:
     /**
      * returns true if the matrix and the other have the same values
      */
-    bool operator==(const Matrix& other);
+    bool operator==(const Matrix& other) noexcept;
 
     /**
      * returns true if the matrix and the other do not have the same values
      */
-    bool operator!=(const Matrix& other);
+    bool operator!=(const Matrix& other) noexcept;
 
     /**
      * only works for square matrixes ( colum = row) other wise throws exception
      * @return a new matrix that is the trasposed matrix to our matrix
+     * throws exception if matrix not square
      */
     Matrix<T> trans();
 
@@ -148,7 +154,7 @@ public:
     /**
      * @return true if the matrix is square
      */
-    bool isSquareMatrix();
+    bool isSquareMatrix() noexcept;
 
 
     /**
