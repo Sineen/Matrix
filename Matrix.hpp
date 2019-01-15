@@ -14,13 +14,15 @@
 #define NEXT_VALUE "\t"
 #define NEXT_LINE "\n"
 
+using namespace std;
+
+
 const string NOT_A_SQUARE = "Matrix is not a Square matrix no trans";
 const string OUT_OF_BOUNDARIES  = "index is out of boundaries";
 const string UNCOMPATABLE_MATRIX_SIZE = "the sizes of the two Matrix do not match, can not perform task";
 const string UNCOMPATABLE_VECTOR_SIZE = "the sizes of the two Vectors do not match, can not perform multiplication";
 
 
-using namespace std;
 
 /**
  * class of exceptions
@@ -35,17 +37,17 @@ class Exceptions : public exception
 
 		~Exceptions() throw() {}
 
-		virtual constexpr decltype(auto) what() const noexcept;
-
+//	/**
+//	* @return the exeption msg
+//	*/
+//	virtual constexpr const char * what() const throw()
+//	{
+//		return this->message_Excep;
+//	}
 };
 
- /**
- * @return the exeption msg
- */
-constexpr decltype(auto) Exceptions::what() const
-{
-	return this->message_Excep;
-}
+
+
 
 
 /**
@@ -76,14 +78,14 @@ public:
 	 * @param rows number of rows we want in our matrix
 	 * @param cols number of columns in out matrix
 	 */
-    Matrix(unsigned int rows, unsigned int cols)  noexcept;
+    Matrix(unsigned int rows, unsigned int cols)  ;
 
 	/**
 	 * a copy constructor that building a matrix with same values of the other matirx
 	 * @param other  a matrix we want to copy
 	 * note this deep copies and the new matrix is not related to the second one after the copy
 	 */
-    Matrix(const Matrix<T>& other) noexcept;
+    Matrix(const Matrix<T>& other) ;
 
 	/**
 	 * constructor that building a matrix of size rows * colums , and fills the matrix we have with the values in cells
@@ -197,28 +199,28 @@ typedef typename std::vector<T>::const_iterator const_iterator;
 	/**
 	 * @return the number of rows in our matrix
 	 */
-    unsigned int rows()const;
+    unsigned int rows()const noexcept ;
 
 	/**
  	* @return the number of columns in our matrix
  	*/
-    unsigned int cols()const;
+    unsigned int cols()const noexcept;
 
 	/**
  	* @return the number of cells in our matrix
  	*/
-    unsigned int getSize() const;
+    unsigned int getSize() const noexcept;
 
 	/**
 	 * @return gets the actual matrix we have Vector witht the values of the cells
 	 */
-    vector<T> getMatrix() const;
+    vector<T> getMatrix() const noexcept;
 
 	/**
 	* @return a refrnece of the actual matrix we have aka vector with the values in case we want to change
 	 * values in the matrix
 	*/
-    vector<T>& getMatrix();
+    vector<T>& getMatrix() noexcept;
 
 	/**
 	 * @param m  the matrix we want the colum from
@@ -362,31 +364,31 @@ Matrix<T> Matrix<T>::operator-(const Matrix &other)
 }
 
 template<class T>
-unsigned int Matrix<T>::rows()const
+unsigned int Matrix<T>::rows()const noexcept
 {
     return this->rowNumbers;
 }
 
 template<class T>
-unsigned int Matrix<T>::cols()const
+unsigned int Matrix<T>::cols()const noexcept
 {
     return this->columns;
 }
 
 template<class T>
-unsigned int Matrix<T>::getSize() const
+unsigned int Matrix<T>::getSize() const noexcept
 {
     return this->size;
 }
 
 template<class T>
-vector<T> Matrix<T>::getMatrix() const
+vector<T> Matrix<T>::getMatrix() const noexcept
 {
     return this->matrix;
 }
 
 template<class T>
-vector<T>& Matrix<T>::getMatrix()
+vector<T>& Matrix<T>::getMatrix() noexcept
 {
     return (*this).matrix;
 }
@@ -420,7 +422,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix &other)
 template<class T>
 T &Matrix<T>::operator()(unsigned int row, unsigned int col)
 {
-	if (this->rows() > row & this->cols() > col )
+	if ((this->rows() > row) & (this->cols() > col ))
 	{
 		unsigned int index = (row * this->cols()) + col;
 		return (*this).matrix.at(index);
@@ -438,7 +440,7 @@ T &Matrix<T>::operator()(unsigned int row, unsigned int col)
 template<class T>
 T Matrix<T>::operator()(unsigned int row, unsigned int col) const
 {
-	if (this->rows() > row & this->cols() > col )
+	if ((this->rows() > row) & (this->cols() > col ))
 	{
 		unsigned int index = (row * this->cols()) + col;
 		return this->matrix.at(index);
@@ -474,7 +476,7 @@ vector<T> Matrix<T>::getColumnIn(const Matrix &m, unsigned int index)
 template<class T>
 vector<T> Matrix<T>::getRowIn(const Matrix &m, unsigned int index)
 {
-	if (index < m.rows() and index >= 0 )
+	if ((index < m.rows()) &( index >= 0 ))
 	{
 		vector<T> col;
 		for (unsigned int i = 0; i < m.cols(); i ++)
@@ -509,7 +511,7 @@ T Matrix<T>::multiplyColRow(vector<T> col, vector<T> row)
 	}
 }
 template<class T>
-bool Matrix<T>::operator==(const Matrix &other)
+bool Matrix<T>::operator==(const Matrix &other) noexcept
 {
 	if (this->getSize() != other.getSize())
 	{
@@ -536,7 +538,7 @@ bool Matrix<T>::operator==(const Matrix &other)
 }
 
 template<class T>
-bool Matrix<T>::operator!=(const Matrix &other)
+bool Matrix<T>::operator!=(const Matrix &other) noexcept
 {
 //	 return ! (this == *other);
 	if (this->getSize() != other.getSize())
@@ -564,7 +566,7 @@ bool Matrix<T>::operator!=(const Matrix &other)
 }
 
 template<class T>
-bool Matrix<T>::isSquareMatrix()
+bool Matrix<T>::isSquareMatrix() noexcept
 {
 	return this->cols() == this->rows();
 }
