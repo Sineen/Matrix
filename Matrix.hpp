@@ -103,14 +103,16 @@ public:
       */
      T operator()(unsigned int row, unsigned int col) const;
 
-//typedef typename std::vector<T>::const_iterator const_iterator;
+typedef typename std::vector<T>::const_iterator const_iterator;
 /// \returns the begin iterator
-    typename vector<T>::iterator begin() {
+    const typename vector<T>::const_iterator begin()
+    {
         return matrix.begin();
     }
 
 /// \returns the end iterator
-    typename vector<T>::iterator end() {
+    const typename vector<T>::const_iterator end()
+    {
         return matrix.end();
     }
 
@@ -120,7 +122,9 @@ public:
 
     unsigned int getSize() const;
 
-    vector<T>& getMatrix() const;
+    vector<T> getMatrix() const;
+
+    vector<T>& getMatrix();
 
     vector<T> getColumnIn(const Matrix<T>& m, unsigned int index);
 
@@ -193,8 +197,16 @@ Matrix<T> Matrix<T>::operator+(const Matrix &other)
     Matrix<T> sum = Matrix(this->rows(), this->cols());
     for(unsigned int i = 0; i < sizes; i++ )
     {
-        sum.getMatrix().at(i) = this->getMatrix().at(i) + other.getMatrix().at(i));
+        sum.getMatrix().at(i) = this->getMatrix().at(i) + other.getMatrix().at(i);
     }
+//	for( unsigned int r = 0; r < this->rows(); r ++ )
+//	{
+//		for( unsigned int c = 0; c < this->cols(); c ++ )
+//		{
+//			sum(r,c) = this(r, c) + other( r, c);
+//		}
+//	}
+
 
     return sum;
 }
@@ -205,10 +217,17 @@ Matrix<T> Matrix<T>::operator-(const Matrix &other)
     Matrix<T> sum = Matrix(this->rows(), this->cols());
     for(unsigned int i = 0; i < this->getSize() ; i++ )
     {
-        sum.getMatrix().at(i) = this->getMatrix().at(i) - other.getMatrix().at(i));
+        sum.getMatrix().at(i) = this->getMatrix().at(i) - other.getMatrix().at(i);
     }
+//	for( unsigned int r = 0; r < this->rows(); r ++ )
+//	{
+//		for( unsigned int c = 0; c < this->cols(); c ++ )
+//		{
+//			sum(r,c) = this(r, c) - other( r, c);
+//		}
+//	}
 
-    return sum;
+	return sum;
 }
 
 template<class T>
@@ -230,10 +249,17 @@ unsigned int Matrix<T>::getSize() const
 }
 
 template<class T>
-vector<T>& Matrix<T>::getMatrix() const
+vector<T> Matrix<T>::getMatrix() const
 {
     return this->matrix;
 }
+
+template<class T>
+vector<T>& Matrix<T>::getMatrix()
+{
+    return this->matrix;
+}
+
 
 template<class T>
 Matrix<T> Matrix<T>::operator*(const Matrix &other)
@@ -275,7 +301,7 @@ vector<T> Matrix<T>::getColumnIn(const Matrix &m,unsigned int index)
 		vector<T> col;
 		for (unsigned int i = 0; i < m.rows(); i ++)
 		{
-			col.push_back(m.matrix.at(index + i));
+			col.push_back(m.matrix.at(index + (i * m.cols())));
 		}
 		return col;
 	}
@@ -291,7 +317,7 @@ vector<T> Matrix<T>::getRowIn(const Matrix &m, unsigned int index)
 	{
 		vector<T> col;
 		for (unsigned int i = 0; i < m.cols(); i ++) {
-			col.push_back(m.matrix.at(index + i));
+			col.push_back(m.matrix.at((index * cols())+ i));
 		}
 		return col;
 	}

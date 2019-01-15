@@ -8,12 +8,12 @@ UVE_Y = --undef-value-errors=yes
 TARFILES = timeChecker.cpp Matrix.hpp README Makefile
 ARG = 500
 
-#all: timeChecker
-#	./timeChecker $(ARG)
+all: timeChecker
+	./timeChecker $(ARG)
 
-#timeChecker: $(OBJECTS)
-#	$(CXX) $(FLAGS) -c TimeChecker.cpp -o TimeChecker.o
-#	$(CXX) $(FLAGS) $(OBJECTS) TimeChecker.o -o timeChecker
+timeChecker: $(OBJECTS)
+	$(CXX) $(FLAGS) -c timeChecker.cpp -o TimeChecker.o
+	$(CXX) $(FLAGS) $(OBJECTS) TimeChecker.o -o timeChecker
 
 Matrix: Matrix.hpp.gch
 
