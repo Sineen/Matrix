@@ -6,10 +6,12 @@ SPL_Y = --show-possibly-lost=yes
 SR_Y = --show-reachable=yes
 UVE_Y = --undef-value-errors=yes
 TARFILES = timeChecker.cpp Matrix.hpp README Makefile
-ARG = 500
+ARG1 = 500
+ARG2 = 50
 
 all: timeChecker
-	./timeChecker $(ARG)
+	./timeChecker $(ARG1)
+	./timeChecker $(ARG2)
 
 timeChecker: $(OBJECTS)
 	$(CXX) $(FLAGS) -c timeChecker.cpp -o TimeChecker.o

@@ -11,6 +11,16 @@
 
 using namespace std;
 
+class Exceptions : public exception
+{
+
+};
+
+
+/**
+ *
+ * @tparam T
+ */
 template <class T>
 class Matrix
 {
@@ -195,19 +205,22 @@ Matrix<T> Matrix<T>::operator+(const Matrix &other)
 {
     unsigned int sizes = this->getSize();
     Matrix<T> sum = Matrix(this->rows(), this->cols());
+    vector<T> sumMatrix = sum.getMatrix();
+    vector<T> thisMatrix = this->getMatrix();
+    vector<T> otherMatrix = other.getMatrix();
     for(unsigned int i = 0; i < sizes; i++ )
     {
-        sum.getMatrix().at(i) = this->getMatrix().at(i) + other.getMatrix().at(i);
-    }
+		sumMatrix.at(i) = thisMatrix.at(i) + otherMatrix.at(i);
+
+	}
 //	for( unsigned int r = 0; r < this->rows(); r ++ )
 //	{
 //		for( unsigned int c = 0; c < this->cols(); c ++ )
 //		{
-//			sum(r,c) = this(r, c) + other( r, c);
+//			sum(r,c) = (*this)(r, c) + other( r, c);
 //		}
 //	}
-
-
+//
     return sum;
 }
 
@@ -215,17 +228,13 @@ template<class T>
 Matrix<T> Matrix<T>::operator-(const Matrix &other)
 {
     Matrix<T> sum = Matrix(this->rows(), this->cols());
+	vector<T> sumMatrix = sum.getMatrix();
+	vector<T> thisMatrix = this->getMatrix();
+	vector<T> otherMatrix = other.getMatrix();
     for(unsigned int i = 0; i < this->getSize() ; i++ )
     {
-        sum.getMatrix().at(i) = this->getMatrix().at(i) - other.getMatrix().at(i);
+		sumMatrix.at(i) = thisMatrix.at(i) - otherMatrix.at(i);
     }
-//	for( unsigned int r = 0; r < this->rows(); r ++ )
-//	{
-//		for( unsigned int c = 0; c < this->cols(); c ++ )
-//		{
-//			sum(r,c) = this(r, c) - other( r, c);
-//		}
-//	}
 
 	return sum;
 }
@@ -273,7 +282,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix &other)
 		for( unsigned int c = 0; c < newCols; c ++ )
 		{
 			vector<T> col = getColumnIn(other, c);
-			mul(r,c) = multiplyColRow(col, row);
+			mul(r, c) = multiplyColRow(col, row);
 		}
 	}
 	return mul;
@@ -294,7 +303,7 @@ T Matrix<T>::operator()(unsigned int row, unsigned int col) const
 }
 
 template<class T>
-vector<T> Matrix<T>::getColumnIn(const Matrix &m,unsigned int index)
+vector<T> Matrix<T>::getColumnIn(const Matrix &m, unsigned int index)
 {
 	if ( index < m.cols() and index >= 0)
 	{
@@ -305,7 +314,8 @@ vector<T> Matrix<T>::getColumnIn(const Matrix &m,unsigned int index)
 		}
 		return col;
 	}
-	else{
+	else
+	{
 		throw "Out of bounderies"; //TODO exeption
 	}
 }
@@ -316,12 +326,14 @@ vector<T> Matrix<T>::getRowIn(const Matrix &m, unsigned int index)
 	if (index < m.rows() and index >= 0 )
 	{
 		vector<T> col;
-		for (unsigned int i = 0; i < m.cols(); i ++) {
-			col.push_back(m.matrix.at((index * cols())+ i));
+		for (unsigned int i = 0; i < m.cols(); i ++)
+		{
+			col.push_back(m.matrix.at((index * cols()) + i));
 		}
 		return col;
 	}
-	else{
+	else
+	{
 		throw "Out of bounderies"; //TODO exeption
 	}
 }
@@ -460,7 +472,7 @@ ostream &operator<<(ostream &stream, const Matrix<T> matrix1)
 	{
 		for (unsigned int c = 0; c < sizeR; c ++)
 		{
-			stream << matrix1(r,c) << "\t";
+			stream << matrix1(r, c) << "\t";
 		}
 		stream << endl;
 	}

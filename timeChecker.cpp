@@ -25,12 +25,20 @@ using namespace std;
 //std::stack<clock_t> tictoc_stack;
 stack<chrono::time_point<chrono::system_clock>> tictoc_stack;
 
-void tic() {
+/**
+ *
+ */
+void tic()
+{
 	//tictoc_stack.push(clock());
 	tictoc_stack.push(chrono::system_clock::now());
 }
 
-void toc() {
+/**
+ *
+ */
+void toc()
+{
 	// std::cout << "Time elapsed: "
 	// 		<< ((double)(clock() - tictoc_stack.top())) / CLOCKS_PER_SEC
 	// 		<< std::endl;
@@ -47,7 +55,7 @@ int main(int argc, char* argv[])
 		throw "wrong number of parameters";
 	}
 	unsigned int size = (unsigned int)stoi(argv[1]);
-	if (size < 0 | size > 500)
+	if (size > 500)
 	{
 		throw "wrong argument";
 	}
@@ -55,9 +63,9 @@ int main(int argc, char* argv[])
 	MatrixXd mE2 = MatrixXd::Random(size, size);
 
 	Matrix m = Matrix<int>(size, size);
-	for ( unsigned int r; r < size; r++ )
+	for ( unsigned int r = 0 ; r < size; r++ )
 	{
-		for(unsigned int c; c < size; c++)
+		for(unsigned int c = 0; c < size; c++)
 		{
 			m(r, c) = 1;
 		}
@@ -66,15 +74,17 @@ int main(int argc, char* argv[])
 
 	cout << "size " << size << endl ;
 
+
+
 	tic();
-	MatrixXd Rm =  mE1 * mE2;
+	mE1 * mE2;
 	cout << "eigen mult ";
 	toc();
 
 //	flush;
 
 	tic();
-	MatrixXd Ra = mE1 + mE2;
+	mE1 + mE2;
 	cout << "eigen add ";
 	toc();
 
@@ -83,16 +93,16 @@ int main(int argc, char* argv[])
 //	flush;
 
 	tic();
-	Matrix<int> Pa = m* m;
+	m* m;
 	cout << "matlib mult ";
-
 	toc();
 
 //	flush;
 
 	tic();
-	Matrix<int> Pm = m + m;
+	m + m;
 	cout << "matlib add ";
 	toc();
+
 	return 0;
 }

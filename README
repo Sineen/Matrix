@@ -1,0 +1,13 @@
+./timeChecker 500
+size 500
+eigen mult 1.148e-06
+eigen add 4.81e-07
+matlib mult 6.0439
+matlib add 0.0165758
+
+./timeChecker 50
+size 50
+eigen mult 9.5e-07
+eigen add 3.34e-07
+matlib mult 0.0104545
+matlib add 0.000182314
