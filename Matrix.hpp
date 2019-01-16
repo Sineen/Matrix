@@ -320,12 +320,12 @@ Matrix<T> Matrix<T>::operator+(const Matrix &other)
     {
         unsigned int sizes = this->getSize();
 
-        vector<T> sumMatrix;
+		vector<T> sumMatrix(this->rows() * this->cols(), T());
         vector<T> thisMatrix = this->getMatrix();
         vector<T> otherMatrix = other.getMatrix();
         for (unsigned int i = 0; i < sizes; i ++)
         {
-            sumMatrix.push_back(thisMatrix.at(i) + otherMatrix.at(i));
+			sumMatrix.at(i) = thisMatrix.at(i) + otherMatrix.at(i);
         }
         return Matrix(this->rows(), this->cols(), sumMatrix);
     }
