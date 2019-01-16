@@ -37,7 +37,7 @@ public:
      /**
     * @return the exeption msg
     */
-    virtual constexpr const char * what() const throw()
+    virtual const char * what() const throw()
     {
        return this->message_Excep.c_str();
     }
@@ -320,12 +320,12 @@ Matrix<T> Matrix<T>::operator+(const Matrix &other)
     {
         unsigned int sizes = this->getSize();
 
-        vector<T> sumMatrix(this->rows() * this->cols(), T());
+        vector<T> sumMatrix;
         vector<T> thisMatrix = this->getMatrix();
         vector<T> otherMatrix = other.getMatrix();
         for (unsigned int i = 0; i < sizes; i ++)
         {
-            sumMatrix.at(i) = thisMatrix.at(i) + otherMatrix.at(i);
+            sumMatrix.push_back(thisMatrix.at(i) + otherMatrix.at(i));
         }
         return Matrix(this->rows(), this->cols(), sumMatrix);
     }
@@ -407,7 +407,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix &other)
         }
         return mul;
     }
-    catch (Exceptions msg)
+    catch (Exceptions& msg)
     {
         throw;
     }
