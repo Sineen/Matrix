@@ -305,7 +305,8 @@ Matrix<T> &Matrix<T>::operator=(const Matrix &other)
     this->columns = other.cols();
     this->matrix.clear();
     vector<T> m = other.getMatrix();
-    for (unsigned int i = 0; i < size; i++) {
+    for (unsigned int i = 0; i < size; i++)
+	{
         matrix.push_back(m.at(i));
     }
     return (*this);
