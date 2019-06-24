@@ -15,14 +15,14 @@ Matlib  || 0.0104545| 0.000182314  ||  6.0439    | 0.0165758
 choose to save the matrix in one vector where the order of the values
 is the order or reading a matrix and to get where each row adn column ends
 we have column and row values and size which is row * column
-with the help of row and column i could know which values in my vector is
+with the help of row and column I could know which values in my vector is
 correspondent to which row or column
 
 
 1) obviously there is a difference where Eigen is much faster than my solution
 	Eigen has a faster access to its data thus making it more efficient
 	since the layout we used for Eigen saves the matrix in columns it gives it easier faster access
-	when we do multiplication between matrix my solution would have tol calculate the columns
+	when we do multiplication between matrix my solution would have to calculate the columns
 	over and over again with each row while Eigen solution doesnt need to do that.
 
 2) as we see the sum is faster than the multiplication in both.
